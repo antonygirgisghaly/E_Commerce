@@ -1,4 +1,9 @@
-﻿using System;
+﻿using E_Commerce.Domain.Comman;
+using E_Commerce.Domain.Contracts;
+using E_Commerce.Infrastracture.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +11,17 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Infrastracture.Repositories
 {
-    internal class GenericRepository
+    internal class GenericRepository<TEntity, Tkey>(StoreDbContext dbContext) : IGenericRepository<TEntity, Tkey> where TEntity : BaseEntity<Tkey>
     {
+        public void Add(TEntity entity) => dbContext.Set<TEntity>().Add(entity);
+
+        public void Delete(TEntity entity) => dbContext.Set<TEntity>().Remove(entity);
+
+        public void Update(TEntity entity) => dbContext.Set<TEntity>().Update(entity);
+
+        public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct = default) => await dbContext.Set<TEntity>().ToListAsync(ct);
+
+        public async Task<TEntity?> GetByIdAsync(Tkey id, CancellationToken ct = default) => await dbContext.Set<TEntity>().FindAsync(id, ct);
+
     }
 }
