@@ -1,5 +1,6 @@
 
 using E_Commerce.API.Extenstions;
+using E_Commerce.Application;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastracture;
 
@@ -15,11 +16,11 @@ namespace E_Commerce.API
 
             builder.Services.AddControllers();
             builder.Services.AddInfrastructureService(builder.Configuration);
+            builder.Services.AddApplicationService();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             var app = builder.Build();
             await app.SeedAndMigrateDataAsync();
             // Configure the HTTP request pipeline.
