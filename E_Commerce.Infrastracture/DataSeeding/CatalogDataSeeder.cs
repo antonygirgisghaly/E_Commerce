@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Infrastracture.DataSeeding
 {
-    internal class CatalogDataSeeder(StoreDbContext dbContext,ILogger logger) : IDataSeeder
+    internal class CatalogDataSeeder(StoreDbContext dbContext,ILogger<CatalogDataSeeder> logger) : IDataSeeder
     {
         public async Task SeedDataAsync(CancellationToken ct = default)
         {
@@ -22,12 +22,12 @@ namespace E_Commerce.Infrastracture.DataSeeding
             {
                 var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync(ct);
                 if (pendingMigrations.Any())
-                {
+                    await dbContext.Database.MigrateAsync(ct);
                     var defaultPath = Path.Combine(AppContext.BaseDirectory, "DataSeed");
 
                     await SeedIfEmpty<ProductBrand, int>(defaultPath, "brands.json", ct);
-                    await SeedIfEmpty<Product, int>(defaultPath, "products.json", ct);
                     await SeedIfEmpty<ProductType, int>(defaultPath, "types.json", ct);
+                    await SeedIfEmpty<Product, int>(defaultPath, "products.json", ct);
 
                     int result =  await dbContext.SaveChangesAsync(ct);
                     if(result > 0)
@@ -39,11 +39,12 @@ namespace E_Commerce.Infrastracture.DataSeeding
                     {
                         logger.LogInformation($"Database already seeded");
                     }
-                }
+                
             }
-            catch
+            catch (Exception ex)
             {
-
+                logger.LogError(ex, "Error during seeding");
+                throw;
             }
         }
 
