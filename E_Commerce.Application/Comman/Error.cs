@@ -1,4 +1,6 @@
-﻿namespace E_Commerce.Application.Comman
+﻿using System.Text.Json.Serialization;
+
+namespace E_Commerce.Application.Comman
 {
     public sealed record Error(string code, string description, ErrorType errorType = ErrorType.Failure)
     {
@@ -17,7 +19,7 @@
         public static Error InvalidCredentials(string code = "General.InvalidCredentials", string description = "Provided Credentials Invalid")
           => new(code, description, ErrorType.InvalidCredentials);
     }
-
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ErrorType
     {
         Failure = 0,

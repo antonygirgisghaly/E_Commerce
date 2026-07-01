@@ -30,11 +30,11 @@ namespace E_Commerce.Application.Comman
         {
             _value = value;
         }
-        private Result(Error error) : base(true, new[] {error })
+        private Result(Error error) : base(false, new[] {error })
         {
             _value = default!;
         }
-        private Result(IReadOnlyList<Error> error) : base(true, error)
+        private Result(IReadOnlyList<Error> error) : base(false, error)
         {
             _value = default!;
         }
