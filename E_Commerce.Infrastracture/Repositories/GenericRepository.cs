@@ -22,12 +22,24 @@ namespace E_Commerce.Infrastracture.Repositories
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken ct = default) => await dbContext.Set<TEntity>().ToListAsync(ct);
 
-        public async Task<TEntity?> GetByIdAsync(Tkey id, CancellationToken ct = default) => await dbContext.Set<TEntity>().FindAsync(id, ct);
-
         public async Task<IReadOnlyList<TEntity>> GetAllAsync(ISpecfications<TEntity, Tkey> spec, CancellationToken ct)
         {
             var query = SpecficationEvaluator.CreateQuery(dbContext.Set<TEntity>(), spec);
             return await query.ToListAsync(ct);
+        }
+        public async Task<TEntity?> GetByIdAsync(Tkey id, CancellationToken ct = default) => await dbContext.Set<TEntity>().FindAsync(id, ct);
+
+        public async Task<TEntity?> GetByIdAsync(ISpecfications<TEntity, Tkey> spec, CancellationToken ct = default)
+        {
+            var query = SpecficationEvaluator.CreateQuery(dbContext.Set<TEntity>(), spec);
+            return await query.FirstOrDefaultAsync(ct);
+        }
+
+        public async Task<int> CountAsync(ISpecfications<TEntity, Tkey> spec, CancellationToken ct)
+        {
+            var query = dbContext.Set<TEntity>().AsQueryable();
+            query =  SpecficationEvaluator.CreateQuery(query, spec);
+            return await query.CountAsync(ct);
         }
     }
 }
