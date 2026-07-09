@@ -19,7 +19,7 @@ namespace E_Commerce.Infrastracture.Repositories
         {
             _database = connection.GetDatabase();
         }
-        public async Task<CustomerBasket>? CreateOrUpdateBasketAsync(CustomerBasket basket, TimeSpan? timeToLive = null, CancellationToken ct = default)
+        public async Task<CustomerBasket?> CreateOrUpdateBasketAsync(CustomerBasket basket, TimeSpan? timeToLive = null, CancellationToken ct = default)
         {
             var value = JsonSerializer.Serialize(basket);
             var result = await _database.StringSetAsync(basket.Id, value, timeToLive ?? TimeSpan.FromDays(7));
