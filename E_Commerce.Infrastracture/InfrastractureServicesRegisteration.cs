@@ -1,4 +1,5 @@
-﻿using E_Commerce.Domain.Contracts;
+﻿using E_Commerce.Application.Contracts;
+using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastracture.Data;
 using E_Commerce.Infrastracture.DataSeeding;
 using E_Commerce.Infrastracture.Repositories;

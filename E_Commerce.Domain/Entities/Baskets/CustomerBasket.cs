@@ -9,6 +9,6 @@ namespace E_Commerce.Domain.Entities.Baskets
     public class CustomerBasket
     {
         public string Id { get; set; } = default!;   //Created from frontend side[GUID]
-        ICollection<BasketItem> Items { get; set; } = [];
+        public ICollection<BasketItem> Items { get; set; } = [];
     }
 }
