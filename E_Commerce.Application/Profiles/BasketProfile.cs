@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using E_Commerce.Application.DTOs;
 using E_Commerce.Application.DTOs.Basket;
 using E_Commerce.Domain.Entities.Baskets;
 using System;
