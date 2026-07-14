@@ -34,5 +34,19 @@ namespace E_Commerce.Application.Services
                     Token = "Token"
                 });
         }
+
+        public async Task<Result<UserDto>> RegisterAsync(RegisterDto register, CancellationToken ct = default)
+        {
+            var result = await _identityService.CreateUserAsync(register, ct);
+            if(!result.IsSuccess)
+                return Result<UserDto>.Fail(result.Errors);
+            var user = result.Data;
+            return Result<UserDto>.Ok(new UserDto
+            {
+                Email = user.Email,
+                DisplayName = user.DisplayName,
+                Token = "Token"
+            });   
+        }
     }
 }

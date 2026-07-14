@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Application.Comman;
 using E_Commerce.Application.Contracts;
+using E_Commerce.Application.DTOs.Identity;
 using E_Commerce.Infrastracture.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -37,6 +38,26 @@ namespace E_Commerce.Infrastracture.Identity.Services
                     return Result<bool>.Fail(Error.NotFound("Invalid password", $"Invalid password"));
                 }
             }
+        }
+
+        public async Task<Result<IdentityUserResult>> CreateUserAsync(RegisterDto registerDto, CancellationToken ct = default)
+        {
+            var user = new ApplicationUser
+            {
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber,
+                UserName = registerDto.UserName,
+                DisplayName = registerDto.DisplayName                       
+            };
+
+            var identityResult = await _userManager.CreateAsync(user, registerDto.Password);
+            if (!identityResult.Succeeded)
+            {
+                var errors = identityResult.Errors.Select(e => new Error(e.Code, e.Description)).ToList();
+                return Result<IdentityUserResult>.Fail(errors);
+            }
+
+            return Result<IdentityUserResult>.Ok(new IdentityUserResult(user.Id, user.DisplayName, user.Email, user.UserName));
         }
 
         public async Task<Result<IdentityUserResult>> FindUserByEmailAsync(string email, CancellationToken ct = default)
