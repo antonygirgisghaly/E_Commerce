@@ -5,6 +5,7 @@ using E_Commerce.Application.Profiles;
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Infrastracture;
 using E_Commerce.Infrastracture.Identity.Entities;
+using E_Commerce.Infrastracture.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 namespace E_Commerce.API
@@ -13,7 +14,7 @@ namespace E_Commerce.API
     {
         public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
 
@@ -21,6 +22,7 @@ namespace E_Commerce.API
             builder.Services.AddInfrastructureService(builder.Configuration);
             builder.Services.AddApplicationService();
             builder.Services.Configure<UrlSettings>(builder.Configuration.GetSection("UrlSeetings"));
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -39,6 +41,7 @@ namespace E_Commerce.API
             });
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
