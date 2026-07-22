@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Domain.Comman;
 using E_Commerce.Domain.Contracts;
+using E_Commerce.Domain.Entities.Orders;
 using E_Commerce.Domain.Entities.Products;
 using E_Commerce.Infrastracture.Data;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +29,8 @@ namespace E_Commerce.Infrastracture.DataSeeding
                     await SeedIfEmpty<ProductBrand, int>(defaultPath, "brands.json", ct);
                     await SeedIfEmpty<ProductType, int>(defaultPath, "types.json", ct);
                     await SeedIfEmpty<Product, int>(defaultPath, "products.json", ct);
-
-                    int result =  await dbContext.SaveChangesAsync(ct);
+                    await SeedIfEmpty<DeliveryMethod, int>(defaultPath, "delivery.json", ct);
+                int result =  await dbContext.SaveChangesAsync(ct);
                     if(result > 0)
                     {
                         logger.LogInformation($"{result} Rows Added");

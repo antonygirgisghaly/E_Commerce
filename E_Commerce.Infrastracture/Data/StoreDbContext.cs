@@ -1,4 +1,5 @@
-﻿using E_Commerce.Domain.Entities.Products;
+﻿using E_Commerce.Domain.Entities.Orders;
+using E_Commerce.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace E_Commerce.Infrastracture.Data
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ProductBrand> ProductBrands { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<DeliveryMethod> OrderItems { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreDbContext).Assembly);
