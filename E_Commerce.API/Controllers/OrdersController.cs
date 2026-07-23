@@ -34,6 +34,12 @@ namespace E_Commerce.API.Controllers
         public async Task<ActionResult<OrderToReturnDto>> GetOrderById(Guid id,CancellationToken ct = default)
         {
             return ToActionResult(await _orderService.GetOrderByIdandEmailAsync(id,GetEmailFromToken(),ct));
-        } 
+        }
+        [AllowAnonymous]
+        [HttpGet("DeleveryMethod")]
+        public async Task<ActionResult<IReadOnlyList<DeleviryMethodDto>>> GetAllDeleveryMethods(CancellationToken ct = default)
+        {
+            return ToActionResult(await _orderService.GetDeleveryMethodAsync(ct));
+        }
     }
 }

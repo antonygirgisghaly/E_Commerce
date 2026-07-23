@@ -87,6 +87,15 @@ namespace E_Commerce.Application.Services
                 return Error.NotFound("Orders Not Found",$"Orders With that email {email} not found");
         }
 
+        public async Task<Result<IReadOnlyList<DeleviryMethodDto>>> GetDeleveryMethodAsync(CancellationToken ct = default)
+        {
+            var result = await _unitOfWork.GetGenericRepository<DeliveryMethod, int>().GetAllAsync(ct);
+            if (result.Any())
+                return Result<IReadOnlyList<DeleviryMethodDto>>.Ok(_mapper.Map<IReadOnlyList<DeleviryMethodDto>>(result));
+            else
+                return Error.NotFound("Delevery Method Not Found");
+        }
+
         public async Task<Result<OrderToReturnDto>> GetOrderByIdandEmailAsync(Guid id, string email, CancellationToken ct = default)
         {
              var result = await _unitOfWork.GetGenericRepository<Order,Guid>().GetByIdAsync(new OrderSpecfication(email,id),ct);
