@@ -22,5 +22,18 @@ namespace E_Commerce.API.Controllers
             var result = await _orderService.CreateOrderAsync(orderDto, GetEmailFromToken(), ct);
             return ToActionResult(result); 
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetAllOrders(CancellationToken ct =default)
+        {
+            return ToActionResult(await _orderService.GetAllOrdersAsync(GetEmailFromToken(), ct));
+        }
+        [Authorize]
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<OrderToReturnDto>> GetOrderById(Guid id,CancellationToken ct = default)
+        {
+            return ToActionResult(await _orderService.GetOrderByIdandEmailAsync(id,GetEmailFromToken(),ct));
+        } 
     }
 }

@@ -77,5 +77,23 @@ namespace E_Commerce.Application.Services
                 return _mapper.Map<OrderToReturnDto>(order);
             }
         }
+
+        public async Task<Result<IReadOnlyList<OrderToReturnDto>>> GetAllOrdersAsync(string email, CancellationToken ct = default)
+        {
+            var orders = await _unitOfWork.GetGenericRepository<Order,Guid>().GetAllAsync(new OrderSpecfication(email),ct);
+            if (orders.Any())
+                return Result<IReadOnlyList<OrderToReturnDto>>.Ok(_mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders));
+            else
+                return Error.NotFound("Orders Not Found",$"Orders With that email {email} not found");
+        }
+
+        public async Task<Result<OrderToReturnDto>> GetOrderByIdandEmailAsync(Guid id, string email, CancellationToken ct = default)
+        {
+             var result = await _unitOfWork.GetGenericRepository<Order,Guid>().GetByIdAsync(new OrderSpecfication(email,id),ct);
+            if(result == null)
+                return Error.NotFound("Order Is Not Found", $"Order With Id {id} Is Not Found");
+            else
+               return _mapper.Map<OrderToReturnDto>(result);
+        }
     }
 }
